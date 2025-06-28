@@ -1,0 +1,60 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0f0f0f',
+                            card: '#1a1a1a',
+                            border: '#2a2a2a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<body class="bg-dark-bg text-gray-100 min-h-screen">
+<header class="bg-dark-card border-b border-dark-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold text-green-400">DevForum</a>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Головна</a>
+                    <a href="index.html#categories" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Категорії</a>
+                    <a href="search.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Пошук</a>
+                </nav>
+
+                <!-- Auth buttons -->
+                <div class="flex items-center space-x-4">
+                    <a href="login.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Вхід</a>
+                </div>
+            </div>
+        </div>
+    </header>
+{% block content %}
+{% endblock %}
+<footer class="bg-dark-card border-t border-dark-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 DevForum. Всі права захищені.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

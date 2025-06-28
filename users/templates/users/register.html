@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %} Registration {% endblock %}
+{% block content %}
+    <main class="flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div>
+                <h2 class="mt-6 text-center text-3xl font-bold">
+                    Створити акаунт
+                </h2>
+                <p class="mt-2 text-center text-sm text-gray-400">
+                    Або
+                    <a href="login.html" class="font-medium text-green-400 hover:text-green-300">
+                        увійдіть в існуючий акаунт
+                    </a>
+                </p>
+            </div>
+
+            <div class="bg-dark-card rounded-lg border border-dark-border p-8">
+                <form class="space-y-6" method="post">
+                    {% csrf_token %}
+                    <div>
+                        {{ form.email.label }}
+                        {{ form.email }}
+                    </div>
+                    <div>
+                        {{ form.username.label }}
+                        {{ form.username }}
+                    </div>
+                    <div>
+                        {{ form.password1.label }}
+                        {{ form.password1 }}
+                    </div>
+                    <div>
+                        {{ form.password2.label }}
+                        {{ form.password2 }}
+                    </div>
+                    <div>
+                        <button
+                                type="submit"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:ring-offset-gray-800 transition-colors"
+                        >
+                            Sign up
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}
