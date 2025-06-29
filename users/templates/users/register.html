@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% block title %} Registration {% endblock %}
+
 {% block content %}
     <main class="flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
@@ -9,7 +11,7 @@
                 </h2>
                 <p class="mt-2 text-center text-sm text-gray-400">
                     Або
-                    <a href="login.html" class="font-medium text-green-400 hover:text-green-300">
+                    <a href="{% url 'users:login' %}" class="font-medium text-green-400 hover:text-green-300">
                         увійдіть в існуючий акаунт
                     </a>
                 </p>
@@ -18,22 +20,45 @@
             <div class="bg-dark-card rounded-lg border border-dark-border p-8">
                 <form class="space-y-6" method="post">
                     {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <p class="text-red-500 text-xs mb-4">
+                            {{ form.non_field_errors.0 }}
+                        </p>
+                    {% endif %}
+
                     <div>
                         {{ form.email.label }}
                         {{ form.email }}
+                        {% if form.email.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ form.email.errors.0 }}</p>
+                        {% endif %}
                     </div>
+
                     <div>
                         {{ form.username.label }}
                         {{ form.username }}
+                        {% if form.username.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
+                        {% endif %}
                     </div>
+
                     <div>
                         {{ form.password1.label }}
                         {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ form.password1.errors.0 }}</p>
+                        {% endif %}
                     </div>
+
                     <div>
                         {{ form.password2.label }}
                         {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ form.password2.errors.0 }}</p>
+                        {% endif %}
                     </div>
+
                     <div>
                         <button
                                 type="submit"

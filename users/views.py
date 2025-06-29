@@ -32,7 +32,7 @@ def user_login(request):
                 form.add_error(None, "Invalid email or password.")
     else:
         form = UserLoginForm()
-    return redirect(request, 'users/login.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form})
 
 
 def my_profile(request):

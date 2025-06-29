@@ -42,6 +42,26 @@ class UserLoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        common_classes = (
+            'w-full px-3 py-2 bg-gray-800 border border-gray-600 '
+            'rounded-md text-white placeholder-gray-400 '
+            'focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent'
+        )
+
+        for field_name in ['email', 'password']:
+            field = self.fields[field_name]
+            existing_classes = field.widget.attrs.get('class', '')
+            field.widget.attrs['class'] = (existing_classes + ' ' + common_classes).strip()
+
+            placeholders = {
+                'email': 'Your email',
+                'password': 'Your password',
+            }
+            field.widget.attrs['placeholder'] = placeholders[field_name]
+
     def clean(self):
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
