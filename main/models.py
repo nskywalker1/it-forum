@@ -14,7 +14,6 @@ class Category(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=100, unique=True)
     body = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts')
@@ -22,9 +21,6 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     views = models.PositiveIntegerField(default=0)
     likes = models.PositiveIntegerField(default=0)
-
-    def get_absolute_url(self):
-        return reverse('main:post_detail', kwargs={'post_slug': self.slug})
 
     def total_comments(self):
         return self.comments.count()

@@ -5,4 +5,5 @@ app_name = 'main'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('topic/<int:post_id>/', views.post_detail, name='post_detail'),
 ]

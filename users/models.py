@@ -15,7 +15,12 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
+
+        user = self.create_user(email, password, **extra_fields)
+
+        Profile.objects.create(user=user, role='admin')
+
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -30,12 +35,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.email
+        return self.username
 
 
 class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('veteran', 'Veteran'),
+        ('newbie', 'Newbie'),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='newbie')
     avatar = models.ImageField(upload_to='avatars', blank=True)
     bio = models.TextField(max_length=500, blank=True)
     github = models.URLField(blank=True)
@@ -43,6 +53,13 @@ class Profile(models.Model):
     youtube = models.URLField(blank=True)
     linkedin = models.URLField(blank=True)
     is_online = models.BooleanField(default=False)
+
+    def get_role_color_class(self):
+        return {
+            'admin': 'bg-red-600',
+            'veteran': 'bg-amber-600',
+            'newbie': 'bg-green-600',
+        }.get(self.role, 'bg-gray-400')
 
     def __str__(self):
         return f"{self.user.username} Profile"
