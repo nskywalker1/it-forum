@@ -7,9 +7,10 @@
         <!-- Breadcrumb -->
         <nav class="mb-6">
             <ol class="flex items-center space-x-2 text-sm text-gray-400">
-                <li><a href="index.html" class="hover:text-green-400">Home</a></li>
+                <li><a href="/" class="hover:text-green-400">Home</a></li>
                 <li>/</li>
-                <li><a href="index.html#categories" class="hover:text-green-400">{{ post.category }}</a></li>
+                <li><a href="{% url 'main:posts_by_category' post.category.id %}"
+                       class="hover:text-green-400">{{ post.category }}</a></li>
                 <li>/</li>
                 <li class="text-gray-300">{{ post.title }}</li>
             </ol>
@@ -119,14 +120,14 @@
                 <div>
                     {{ form.content }}
                 </div>
-                    <div>
-                        <button
-                                type="submit"
-                                class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors"
-                        >
-                            Submit
-                        </button>
-                    </div>
+                <div>
+                    <button
+                            type="submit"
+                            class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors"
+                    >
+                        Submit
+                    </button>
+                </div>
             </form>
         </div>
     </main>

@@ -15,30 +15,32 @@
             {% for category, posts in category_data %}
                 <div class="bg-dark-card rounded-lg border border-dark-border mb-6">
                     <div class="p-4 border-b border-dark-border">
-                        <h3 class="text-xl font-semibold text-green-400 mb-2">{{ category.name }}</h3>
+                        <a href="{% url 'main:posts_by_category' category.id %}"
+                           class="text-xl font-semibold text-green-400 mb-2">{{ category.name }}</a>
                         <p class="text-gray-400 text-sm">{{ category.description }}</p>
                     </div>
                     <div class="divide-y divide-dark-border">
                         {% for post in posts %}
                             <div class="p-4 hover:bg-gray-800 transition-colors">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h4 class="font-medium mb-1">
-                                    <a href="topic.html" class="text-white hover:text-green-400">{{ post.title }}</a>
-                                </h4>
-                                <p class="text-gray-400 text-sm mb-2">{{ post.body|truncatechars:20 }}</p>
-                                <div class="flex items-center text-xs text-gray-500 space-x-4">
-                                    <span>Author: <span class="text-green-400">{{ post.author.username }}</span></span>
-                                    <span>Відповідей: {{ post.total_comments }}</span>
-                                    <span>Creation: {{ post.created_at }}</span>
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium mb-1">
+                                            <a href="{% url 'main:post_detail' post.id %}"
+                                               class="text-white hover:text-green-400">{{ post.title }}</a>
+                                        </h4>
+                                        <p class="text-gray-400 text-sm mb-2">{{ post.body|truncatechars:20 }}</p>
+                                        <div class="flex items-center text-xs text-gray-500 space-x-4">
+                                            <span>Author: <span class="text-green-400">{{ post.author.username }}</span></span>
+                                            <span>Відповідей: {{ post.total_comments }}</span>
+                                            <span>Creation: {{ post.created_at }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2 ml-4">
+                                        <img src="{{ post.author.profile.avatar.url }}" alt="Avatar"
+                                             class="w-8 h-8 rounded-full">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="flex items-center space-x-2 ml-4">
-                                <img src="/placeholder.svg?height=32&width=32" alt="Avatar"
-                                     class="w-8 h-8 rounded-full">
-                            </div>
-                        </div>
-                    </div>
                         {% endfor %}
                     </div>
                 </div>

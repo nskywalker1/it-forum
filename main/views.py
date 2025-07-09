@@ -29,3 +29,10 @@ def post_detail(request, post_id):
     else:
         form = CommentForm()
         return render(request, 'main/detail.html', {'post': post, 'form': form, 'comments': comments})
+
+
+def posts_by_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    posts = category.posts.all()
+
+    return render(request, 'main/posts_category.html', {'category': category, 'posts': posts})
