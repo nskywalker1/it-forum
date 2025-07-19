@@ -26,6 +26,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=50, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -48,6 +49,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='newbie')
     avatar = models.ImageField(upload_to='avatars', blank=True)
     bio = models.TextField(max_length=500, blank=True)
+    country = models.CharField(max_length=50, blank=True)
     github = models.URLField(blank=True)
     telegram = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
@@ -56,9 +58,9 @@ class Profile(models.Model):
 
     def get_role_color_class(self):
         return {
-            'admin': 'bg-red-600',
-            'veteran': 'bg-amber-600',
-            'newbie': 'bg-green-600',
+            'admin': 'red-600',
+            'veteran': 'amber-600',
+            'newbie': 'green-600',
         }.get(self.role, 'bg-gray-400')
 
     def __str__(self):

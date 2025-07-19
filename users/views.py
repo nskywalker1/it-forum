@@ -1,9 +1,13 @@
-from django.http import HttpResponseForbidden
+from django.core.paginator import Paginator
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
+
 from .forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import User, Profile
+from main.models import Post
 
 
 def user_register(request):
@@ -35,12 +39,25 @@ def user_login(request):
     return render(request, 'users/login.html', {'form': form})
 
 
-def my_profile(request):
-    profile = request.user.profile
-    return redirect('profile_detail', pk=profile.pk)
+@login_required(login_url='users:login')
+def profile(request):
+    user = request.user
+    posts = Post.objects.filter(author=user).order_by('-created_at')
+    paginator = Paginator(posts, 4)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('users/includes/post_list.html', {'posts': page_obj})
+        return JsonResponse({
+            'posts_html': html,
+            'has_next': page_obj.has_next(),
+        })
+
+    return render(request, 'users/profile.html', {'user': user, 'posts': page_obj})
 
 
-def profile_detail(request, pk):
+def profile_view(request, pk):
     profile = get_object_or_404(Profile, pk=pk)
     return render(request, 'users/profile_detail.html', {'profile': profile})
 
@@ -59,3 +76,8 @@ def profile_edit(request, pk):
         else:
             form = UserProfileForm(instance=profile)
         return render(request, 'users/profile_edit.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('users:login')
