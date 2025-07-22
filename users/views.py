@@ -11,6 +11,8 @@ from main.models import Post
 
 
 def user_register(request):
+    if request.user.is_authenticated:
+        return redirect('main:home')
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -23,6 +25,8 @@ def user_register(request):
 
 
 def user_login(request):
+    if request.user.is_authenticated:
+        return redirect('main:home')
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():

@@ -42,7 +42,7 @@
             <!-- Auth buttons -->
             <div class="flex items-center space-x-4">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'users:login' %}"
+                    <a href="{% url 'users:my_profile' %}"
                        class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Profile</a>
                     <a href="{% url 'users:logout' %}"
                        class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logout</a>

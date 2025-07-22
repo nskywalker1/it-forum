@@ -39,6 +39,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+    bg_color = models.CharField(max_length=20, default="bg-gray-600")
+    text_color = models.CharField(max_length=20, default="text-gray-400")
+
+    def __str__(self):
+        return self.name
+
+
 class Profile(models.Model):
     ROLE_CHOICES = [
         ('admin', 'Admin'),
@@ -50,6 +59,7 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='avatars', blank=True)
     bio = models.TextField(max_length=500, blank=True)
     country = models.CharField(max_length=50, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='tags')
     github = models.URLField(blank=True)
     telegram = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
