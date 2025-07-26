@@ -3,7 +3,7 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 
-from .forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from .forms import UserLoginForm, UserRegistrationForm, ProfileForm, UserForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import User, Profile
@@ -44,9 +44,9 @@ def user_login(request):
 
 
 @login_required(login_url='users:login')
-def profile(request):
-    user = request.user
-    posts = Post.objects.filter(author=user).order_by('-created_at')
+def profile(request, pk):
+    profile_user = get_object_or_404(User, pk=pk)
+    posts = Post.objects.filter(author=profile_user).order_by('-created_at')
     paginator = Paginator(posts, 4)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
@@ -58,28 +58,35 @@ def profile(request):
             'has_next': page_obj.has_next(),
         })
 
-    return render(request, 'users/profile.html', {'user': user, 'posts': page_obj})
+    is_owner = request.user == profile_user
+
+    return render(request, 'users/profile.html', {
+        'profile_user': profile_user,
+        'posts': page_obj,
+        'is_owner': is_owner
+    })
 
 
-def profile_view(request, pk):
-    profile = get_object_or_404(Profile, pk=pk)
-    return render(request, 'users/profile_detail.html', {'profile': profile})
-
-
-def profile_edit(request, pk):
-    profile = get_object_or_404(Profile, pk=pk)
-
-    if profile.user != request.user:
-        return HttpResponseForbidden("You can't edit someone else's profile.")
+def profile_edit(request):
+    user = request.user
+    profile = user.profile
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('profile_detail', pk=profile.pk)
-        else:
-            form = UserProfileForm(instance=profile)
-        return render(request, 'users/profile_edit.html', {'form': form})
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            profile_form.save()
+            user_form.save()
+            return redirect('users:profile', pk=user.pk)
+    else:
+        user_form = UserForm(instance=user)
+        profile_form = ProfileForm(instance=profile)
+
+    return render(request, 'users/profile_edit.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
 
 
 def user_logout(request):

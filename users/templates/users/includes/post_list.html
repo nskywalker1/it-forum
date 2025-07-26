@@ -3,7 +3,7 @@
         <div class="border-l-4 border-blue-500 pl-4">
             <div class="flex items-start justify-between mb-2">
                 <h3 class="font-medium">
-                    <a href="topic.html" class="text-white hover:text-green-400">
+                    <a href="{% url 'main:post_detail' post.id %}" class="text-white hover:text-green-400">
                         {{ post.title }}
                     </a>
                 </h3>

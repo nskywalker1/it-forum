@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main class="flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div>
+                <h2 class="mt-6 text-center text-3xl font-bold">
+                    Profile editing
+                </h2>
+            </div>
+
+            <div class="bg-dark-card rounded-lg border border-dark-border p-8">
+                <form action="{% url 'users:profile_edit' %}" class="space-y-6" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if user_form.non_field_errors %}
+                        <p class="text-red-500 text-xs mb-4">
+                            {{ user_form.non_field_errors.0 }}
+                        </p>
+                    {% endif %}
+
+                    <div>
+                        <h4 class="mt-6 text-center text-2xl font-bold">User information</h4>
+                        <div>
+                            {{ user_form.email.label }}
+                            {{ user_form.email }}
+                            {% if form.email.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ user_form.email.errors }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ user_form.username.label }}
+                            {{ user_form.username }}
+                            {% if form.username.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ user_form.username.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="mt-6 p-4 text-center text-2xl font-bold">Profile</h4>
+                        <div class="flex justify-center mb-4">
+                            <label for="id_avatar" style="cursor: pointer; position: relative;">
+                                {% if profile_form.instance.avatar %}
+                                    <img id="avatar-preview" src="{{ profile_form.instance.avatar.url }}" alt="Avatar"
+                                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;">
+                                {% else %}
+                                    <div class="noimg">
+                                    </div>
+                                {% endif %}
+                                <input type="file" id="id_avatar" name="avatar" style="display: none;">
+                            </label>
+                        </div>
+                        <div>
+                            {{ profile_form.bio.label }}
+                            {{ profile_form.bio }}
+                            {% if profile_form.bio.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ profile_form.bio.errors }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ profile_form.github.label }}
+                            {{ profile_form.github }}
+                            {% if profile_form.github.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ profile_form.github.errors }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ profile_form.telegram.label }}
+                            {{ profile_form.telegram }}
+                            {% if profile_form.telegram.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ profile_form.telegram.errors }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ profile_form.linkedin.label }}
+                            {{ profile_form.linkedin }}
+                            {% if profile_form.linkedin.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ profile_form.linkedin.errors }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ profile_form.tags.label }}
+                            {{ profile_form.tags }}
+                            {% if profile_form.linkedin.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ profile_form.linkedin.errors }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <button
+                                type="submit"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:ring-offset-gray-800 transition-colors"
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        const input = document.querySelector('input[type="file"]');
+        const preview = document.getElementById('avatar-preview');
+
+        input.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        })
+    </script>
+{% endblock %}
