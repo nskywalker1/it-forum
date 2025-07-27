@@ -1,0 +1,340 @@
+{% extends "base.html" %} {% block title %} {% endblock %} {% block content %}
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-6">
+        <ol class="flex items-center space-x-2 text-sm text-gray-400">
+            <li><a href="index.html" class="hover:text-green-400">Головна</a></li>
+            <li>/</li>
+            <li class="text-gray-300">Створити тему</li>
+        </ol>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white mb-2">Створити нову тему</h1>
+        <p class="text-gray-400">
+            Поділіться своїми думками, задайте питання або почніть обговорення
+        </p>
+    </div>
+
+    <!-- Create Post Form -->
+    <div class="bg-dark-card rounded-lg border border-dark-border">
+        <form class="p-6 space-y-6">
+            <!-- Title -->
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-300 mb-2">
+                    Заголовок теми
+                    <span class="text-red-400">*</span>
+                </label>
+                <input
+                    id="title"
+                    name="title"
+                    type="text"
+                    required
+                    maxlength="100"
+                    class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Введіть заголовок вашої теми..."
+                />
+                <div class="mt-1 text-xs text-gray-500">
+                    <span id="title-counter">0</span>
+                    /100 символів
+                </div>
+            </div>
+
+            <!-- Category and Tags Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Category -->
+                <div>
+                    <label for="category" class="block text-sm font-medium text-gray-300 mb-2">
+                        Категорія
+                        <span class="text-red-400">*</span>
+                    </label>
+                    <select
+                        id="category"
+                        name="category"
+                        required
+                        class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    >
+                        <option value="">Оберіть категорію</option>
+                        <option value="general">🗣️ Загальні</option>
+                        <option value="it">💻 ІТ та Програмування</option>
+                        <option value="memes">😂 Мемчики</option>
+                    </select>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <label for="tags" class="block text-sm font-medium text-gray-300 mb-2">
+                        Теги
+                    </label>
+                    <input
+                        id="tags"
+                        name="tags"
+                        type="text"
+                        class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        placeholder="react, javascript, frontend"
+                    />
+                    <div class="mt-1 text-xs text-gray-500">Розділіть теги комами</div>
+                </div>
+            </div>
+
+            <!-- Content Editor -->
+            <div>
+                <label for="content" class="block text-sm font-medium text-gray-300 mb-2">
+                    Зміст повідомлення
+                    <span class="text-red-400">*</span>
+                </label>
+
+                <!-- Editor Toolbar -->
+                <div
+                    class="border border-gray-600 rounded-t-md bg-gray-800 px-3 py-2 flex items-center space-x-2 border-b-0"
+                >
+                    <button
+                        type="button"
+                        class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                        title="Жирний"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M3 5a1 1 0 011-1h5.5a2.5 2.5 0 010 5H4v2h4.5a2.5 2.5 0 010 5H4a1 1 0 01-1-1V5zM8 7v2h1.5a.5.5 0 000-1H8zm0 4v2h2.5a.5.5 0 000-1H8z"
+                            />
+                        </svg>
+                    </button>
+                    <button
+                        type="button"
+                        class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                        title="Курсив"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M8 5a1 1 0 000 2h1.5L7.5 13H6a1 1 0 000 2h4a1 1 0 000-2H8.5l2-6H12a1 1 0 000-2H8z"
+                            />
+                        </svg>
+                    </button>
+                    <button
+                        type="button"
+                        class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                        title="Посилання"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z"
+                            />
+                        </svg>
+                    </button>
+                    <button
+                        type="button"
+                        class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                        title="Код"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M13.962 8.795l1.414-1.414L12 4.005 8.624 7.38l1.414 1.414L12 6.833l1.962 1.962zM6 10l1.962 1.962L6.624 13.38 3.248 10.004l3.376-3.376L8.586 8.59 6 10zm8 0l-1.962-1.962L13.376 6.62l3.376 3.376-3.376 3.376L11.414 11.41 14 10z"
+                            />
+                        </svg>
+                    </button>
+                    <div class="w-px h-6 bg-gray-600"></div>
+                    <button
+                        type="button"
+                        class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                        title="Зображення"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                            />
+                        </svg>
+                    </button>
+                    <button
+                        type="button"
+                        class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+                        title="Емодзі"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z"
+                            />
+                        </svg>
+                    </button>
+                </div>
+
+                <textarea
+                    id="content"
+                    name="content"
+                    rows="12"
+                    required
+                    class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-b-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none border-t-0"
+                    placeholder="Напишіть ваше повідомлення тут...
+
+Ви можете використовувати Markdown форматування:
+**жирний текст**
+*курсив*
+`код`
+[посилання](https://example.com)
+- список
+1. нумерований список
+
+Будьте ввічливими та дотримуйтесь правил спільноти!"
+                ></textarea>
+
+                <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                    <span>Підтримується Markdown форматування</span>
+                    <span id="content-counter">0</span>
+                    символів
+                </div>
+            </div>
+
+            <!-- Post Options -->
+            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 space-y-4">
+                <h3 class="text-sm font-medium text-gray-300">Налаштування публікації</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Post Type -->
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Тип публікації</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="post_type"
+                                    value="discussion"
+                                    checked
+                                    class="text-green-600 bg-gray-800 border-gray-600 focus:ring-green-500"
+                                />
+                                <span class="ml-2 text-sm text-gray-300">💬 Обговорення</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="post_type"
+                                    value="question"
+                                    class="text-green-600 bg-gray-800 border-gray-600 focus:ring-green-500"
+                                />
+                                <span class="ml-2 text-sm text-gray-300">❓ Питання</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input
+                                    type="radio"
+                                    name="post_type"
+                                    value="tutorial"
+                                    class="text-green-600 bg-gray-800 border-gray-600 focus:ring-green-500"
+                                />
+                                <span class="ml-2 text-sm text-gray-300">📚 Туторіал</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Additional Options -->
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Додаткові опції</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    name="notify_replies"
+                                    checked
+                                    class="text-green-600 bg-gray-800 border-gray-600 rounded focus:ring-green-500"
+                                />
+                                <span class="ml-2 text-sm text-gray-300">
+                                    Сповіщати про відповіді
+                                </span>
+                            </label>
+                            <label class="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    name="allow_anonymous"
+                                    class="text-green-600 bg-gray-800 border-gray-600 rounded focus:ring-green-500"
+                                />
+                                <span class="ml-2 text-sm text-gray-300">
+                                    Дозволити анонімні відповіді
+                                </span>
+                            </label>
+                            <label class="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    name="pin_post"
+                                    class="text-green-600 bg-gray-800 border-gray-600 rounded focus:ring-green-500"
+                                />
+                                <span class="ml-2 text-sm text-gray-300">Закріпити тему</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Section (Hidden by default) -->
+            <div id="preview-section" class="hidden">
+                <div class="border-t border-gray-600 pt-6">
+                    <h3 class="text-lg font-semibold text-gray-300 mb-4">Попередній перегляд</h3>
+                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6">
+                        <div id="preview-content" class="prose prose-invert max-w-none">
+                            <!-- Preview content will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between pt-6 border-t border-gray-600">
+                <div class="flex items-center space-x-4">
+                    <button
+                        type="button"
+                        id="preview-btn"
+                        class="px-4 py-2 text-gray-400 hover:text-white border border-gray-600 rounded-md hover:border-gray-500 transition-colors"
+                    >
+                        👁️ Попередній перегляд
+                    </button>
+                    <button
+                        type="button"
+                        class="px-4 py-2 text-gray-400 hover:text-white border border-gray-600 rounded-md hover:border-gray-500 transition-colors"
+                    >
+                        💾 Зберегти як чернетку
+                    </button>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <a
+                        href="index.html"
+                        class="px-6 py-2 text-gray-400 hover:text-white border border-gray-600 rounded-md hover:border-gray-500 transition-colors"
+                    >
+                        Скасувати
+                    </a>
+                    <button
+                        type="submit"
+                        class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors"
+                    >
+                        🚀 Опублікувати
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-8 bg-dark-card rounded-lg border border-dark-border p-6">
+        <h3 class="text-lg font-semibold text-gray-300 mb-4">
+            💡 Поради для створення якісних тем
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-400">
+            <div>
+                <h4 class="font-medium text-gray-300 mb-2">Хороший заголовок:</h4>
+                <ul class="space-y-1 list-disc list-inside">
+                    <li>Чітко описує суть питання</li>
+                    <li>Містить ключові слова</li>
+                    <li>Не містить CAPS LOCK</li>
+                    <li>Конкретний та інформативний</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-medium text-gray-300 mb-2">Якісний контент:</h4>
+                <ul class="space-y-1 list-disc list-inside">
+                    <li>Детально описує проблему</li>
+                    <li>Містить приклади коду</li>
+                    <li>Показує що ви вже спробували</li>
+                    <li>Дотримується правил спільноти</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
