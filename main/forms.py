@@ -21,7 +21,6 @@ class CommentForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
@@ -34,3 +33,22 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ["title", "body", "category"]
+        widgets = {
+            "title": forms.TextInput(
+                attrs={
+                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent""",
+                    "placeholder": "Enter title",
+                }
+            ),
+            "body": forms.Textarea(
+                attrs={
+                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-b-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent""",
+                    "placeholder": "Enter body",
+                }
+            ),
+            "category": forms.Select(
+                attrs={
+                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"""
+                }
+            ),
+        }

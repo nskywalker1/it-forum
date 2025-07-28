@@ -1,11 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -13,12 +17,12 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
 
         user = self.create_user(email, password, **extra_fields)
 
-        Profile.objects.create(user=user, role='admin')
+        Profile.objects.create(user=user, role="admin")
 
         return user
 
@@ -32,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     def __str__(self):
@@ -50,28 +54,28 @@ class Tag(models.Model):
 
 class Profile(models.Model):
     ROLE_CHOICES = [
-        ('admin', 'Admin'),
-        ('veteran', 'Veteran'),
-        ('newbie', 'Newbie'),
+        ("admin", "Admin"),
+        ("veteran", "Veteran"),
+        ("newbie", "Newbie"),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='newbie')
-    avatar = models.ImageField(upload_to='avatars', blank=True)
-    bio = models.TextField(max_length=500, blank=True)
-    country = models.CharField(max_length=50, blank=True)
-    tags = models.ManyToManyField(Tag, blank=True, related_name='tags')
-    github = models.URLField(blank=True)
-    telegram = models.URLField(blank=True)
-    youtube = models.URLField(blank=True)
-    linkedin = models.URLField(blank=True)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default="newbie")
+    avatar = models.ImageField(upload_to="avatars", blank=True, null=True)
+    bio = models.TextField(max_length=500, blank=True, null=True)
+    country = models.CharField(max_length=50, blank=True, null=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name="tags")
+    github = models.URLField(blank=True, null=True)
+    telegram = models.URLField(blank=True, null=True)
+    youtube = models.URLField(blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
     is_online = models.BooleanField(default=False)
 
     def get_role_color_class(self):
         return {
-            'admin': 'red-600',
-            'veteran': 'amber-600',
-            'newbie': 'green-600',
-        }.get(self.role, 'bg-gray-400')
+            "admin": "red-600",
+            "veteran": "amber-600",
+            "newbie": "green-600",
+        }.get(self.role, "bg-gray-400")
 
     def __str__(self):
         return f"{self.user.username} Profile"

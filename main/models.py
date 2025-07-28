@@ -15,23 +15,29 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     body = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
+    image = models.ImageField(upload_to="images/%Y/%m/%d", blank=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="posts"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     views = models.PositiveIntegerField(default=0)
-    likes = models.PositiveIntegerField(default=0)
+    likes = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return self.title
 
     def total_comments(self):
         return self.comments.count()
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'Comment by {self.author.username} on {self.post.title}'
+        return f"Comment by {self.author.username} on {self.post.title}"

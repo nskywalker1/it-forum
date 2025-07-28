@@ -9,33 +9,35 @@ from .models import User, Profile, Tag
 class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ["username", "email", "password1", "password2"]
         widgets = {
-            'username': forms.TextInput(attrs={'placeholder': 'Your username'}),
-            'email': forms.TextInput(attrs={'placeholder': 'Your email'}),
+            "username": forms.TextInput(attrs={"placeholder": "Your username"}),
+            "email": forms.TextInput(attrs={"placeholder": "Your email"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         common_classes = (
-            'w-full px-3 py-2 bg-gray-800 border border-gray-600 '
-            'rounded-md text-white placeholder-gray-400 '
-            'focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent'
+            "w-full px-3 py-2 bg-gray-800 border border-gray-600 "
+            "rounded-md text-white placeholder-gray-400 "
+            "focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
         )
 
-        for field_name in ['username', 'email', 'password1', 'password2']:
+        for field_name in ["username", "email", "password1", "password2"]:
             field = self.fields[field_name]
-            existing_classes = field.widget.attrs.get('class', '')
-            field.widget.attrs['class'] = (existing_classes + ' ' + common_classes).strip()
+            existing_classes = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = (
+                existing_classes + " " + common_classes
+            ).strip()
 
             placeholders = {
-                'username': 'Your username',
-                'email': 'Your email',
-                'password1': 'Your password',
-                'password2': 'Password confirmation',
+                "username": "Your username",
+                "email": "Your email",
+                "password1": "Your password",
+                "password2": "Password confirmation",
             }
-            field.widget.attrs['placeholder'] = placeholders[field_name]
+            field.widget.attrs["placeholder"] = placeholders[field_name]
 
 
 class UserLoginForm(forms.Form):
@@ -46,25 +48,27 @@ class UserLoginForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         common_classes = (
-            'w-full px-3 py-2 bg-gray-800 border border-gray-600 '
-            'rounded-md text-white placeholder-gray-400 '
-            'focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent'
+            "w-full px-3 py-2 bg-gray-800 border border-gray-600 "
+            "rounded-md text-white placeholder-gray-400 "
+            "focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
         )
 
-        for field_name in ['email', 'password']:
+        for field_name in ["email", "password"]:
             field = self.fields[field_name]
-            existing_classes = field.widget.attrs.get('class', '')
-            field.widget.attrs['class'] = (existing_classes + ' ' + common_classes).strip()
+            existing_classes = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = (
+                existing_classes + " " + common_classes
+            ).strip()
 
             placeholders = {
-                'email': 'Your email',
-                'password': 'Your password',
+                "email": "Your email",
+                "password": "Your password",
             }
-            field.widget.attrs['placeholder'] = placeholders[field_name]
+            field.widget.attrs["placeholder"] = placeholders[field_name]
 
     def clean(self):
-        email = self.cleaned_data.get('email')
-        password = self.cleaned_data.get('password')
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
 
         if email and password:
             user = authenticate(email=email, password=password)
@@ -78,69 +82,85 @@ class UserForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         common_classes = (
-            'w-full px-3 py-2 bg-gray-800 border border-gray-600 '
-            'rounded-md text-white placeholder-gray-400 '
-            'focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent'
+            "w-full px-3 py-2 bg-gray-800 border border-gray-600 "
+            "rounded-md text-white placeholder-gray-400 "
+            "focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
         )
-        for field_name in ['username', 'email']:
+        for field_name in ["username", "email"]:
             field = self.fields[field_name]
-            existing_classes = field.widget.attrs.get('class', '')
-            field.widget.attrs['class'] = (existing_classes + ' ' + common_classes).strip()
+            existing_classes = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = (
+                existing_classes + " " + common_classes
+            ).strip()
 
             placeholders = {
-                'username': 'Your username',
-                'email': 'Your email',
+                "username": "Your username",
+                "email": "Your email",
             }
-            field.widget.attrs['placeholder'] = placeholders[field_name]
+            field.widget.attrs["placeholder"] = placeholders[field_name]
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ["username", "email"]
 
 
 class ProfileForm(forms.ModelForm):
     bio = forms.CharField(
-        widget=forms.Textarea(attrs={
-            'rows': 5,  # кількість рядків (висота)
-            'class': """w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white 
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                "rows": 5,
+                "class": """w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white 
                         placeholder-gray-400 focus:outline-none 
                         focus:ring-2 focus:ring-green-500 focus:border-transparent""",
-            'placeholder': 'Description',
-        })
+                "placeholder": "Description",
+            }
+        ),
     )
     github = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': """w-full px-3 py-2 bg-gray-800 border border-gray-600 
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": """w-full px-3 py-2 bg-gray-800 border border-gray-600 
                         rounded-md text-white placeholder-gray-400 
                         focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"""
-        })
-
+            }
+        ),
     )
     telegram = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': """w-full px-3 py-2 bg-gray-800 border border-gray-600 
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": """w-full px-3 py-2 bg-gray-800 border border-gray-600 
                             rounded-md text-white placeholder-gray-400 
                             focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"""
-        })
+            }
+        ),
     )
     linkedin = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': """w-full px-3 py-2 bg-gray-800 border border-gray-600 
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": """w-full px-3 py-2 bg-gray-800 border border-gray-600 
                                 rounded-md text-white placeholder-gray-400 
                                 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"""
-        })
+            }
+        ),
     )
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
-        widget=forms.SelectMultiple(attrs={
-            'class': (
-                'w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md '
-                'text-white placeholder-gray-400 focus:outline-none '
-                'focus:ring-2 focus:ring-green-500 focus:border-transparent'
-            )
-        })
+        required=False,
+        widget=forms.SelectMultiple(
+            attrs={
+                "class": (
+                    "w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md "
+                    "text-white placeholder-gray-400 focus:outline-none "
+                    "focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                )
+            }
+        ),
     )
 
     class Meta:
         model = Profile
-        fields = ["avatar", "bio", "github", "telegram", "youtube", "linkedin", 'tags']
+        fields = ["avatar", "bio", "github", "telegram", "youtube", "linkedin", "tags"]

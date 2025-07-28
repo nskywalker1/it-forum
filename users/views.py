@@ -3,11 +3,12 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 
+from main.models import Post
+
 from .forms import UserLoginForm, UserRegistrationForm, ProfileForm, UserForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import User, Profile
-from main.models import Post
 
 
 def user_register(request):
@@ -16,7 +17,9 @@ def user_register(request):
     if request.method == "POST":
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.save()
+            Profile.objects.create(user=user)
             login(request, user)
             return redirect("/")
     else:

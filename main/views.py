@@ -49,8 +49,8 @@ def posts_by_category(request, category_id):
 
 def post_create(request):
     if request.method == "POST":
-        form = PostForm(request.BODY, user=request.user)
-        if form.is_valid(commit=False):
+        form = PostForm(request.POST, user=request.user)
+        if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.save()
