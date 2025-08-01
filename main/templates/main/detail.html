@@ -1,157 +1,191 @@
-{% extends 'base.html' %} {% block title %} {% endblock %} {% block content %}
-<!-- Main Content -->
-<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Breadcrumb -->
-    <nav class="mb-6">
-        <ol class="flex items-center space-x-2 text-sm text-gray-400">
-            <li><a href="/" class="hover:text-green-400">Home</a></li>
-            <li>/</li>
-            <li>
-                <a
-                    href="{% url 'main:posts_by_category' post.category.id %}"
-                    class="hover:text-green-400"
-                >
-                    {{post.category }}
-                </a>
-            </li>
-            <li>/</li>
-            <li class="text-gray-300">{{ post.title }}</li>
-        </ol>
-    </nav>
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+{% block content %}
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Breadcrumb -->
+        <nav class="mb-6">
+            <ol class="flex items-center space-x-2 text-sm text-gray-400">
+                <li><a href="/" class="hover:text-green-400">Home</a></li>
+                <li>/</li>
+                <li>
+                    <a href="{% url 'main:posts_by_category' post.category.id %}" class="hover:text-green-400">
+                        {{ post.category }}
+                    </a>
+                </li>
+                <li>/</li>
+                <li class="text-gray-300">{{ post.title }}</li>
+            </ol>
+        </nav>
 
-    <!-- Topic Header -->
-    <div class="bg-dark-card rounded-lg border border-dark-border p-6 mb-6">
-        <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
-        <div class="flex items-center text-sm text-gray-400 space-x-4">
+        <!-- Topic Header -->
+        <div class="bg-dark-card rounded-lg border border-dark-border p-6 mb-6">
+            <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
+            <div class="flex items-center text-sm text-gray-400 space-x-4">
             <span>
                 Created:
                 <a href="{% url 'users:profile' post.author.id %}" class="text-green-400">
                     {{ post.author }}
                 </a>
             </span>
-            <span>{{ post.created_at|date:"j E Y" }}</span>
-            <span>Comments: {{ post.total_comments }}</span>
+                <span>{{ post.created_at|date:"j E Y" }}</span>
+                <span>Comments: {{ post.total_comments }}</span>
+            </div>
         </div>
-    </div>
 
-    <!-- Messages -->
-    <div class="space-y-6">
-        <!-- Original Post -->
-        <div class="bg-dark-card rounded-lg border border-dark-border">
-            <div class="p-6">
-                <div class="flex items-start space-x-4">
-                    <div class="flex-shrink-0">
-                        <img
-                            src="{{ post.author.profile.avatar.url }}"
-                            alt="Avatar"
-                            class="w-12 h-12 rounded-full"
-                        />
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <a
-                                href="{% url 'users:profile' post.author.id %}"
-                                class="font-semibold text-gray-300"
-                            >
-                                {{post.author }}
-                            </a>
-                            <span
-                                class="
-                                        bg-{{ post.author.profile.get_role_color_class }} text-xs px-2 py-1 rounded"
-                            >
+        <!-- Post Content -->
+        <div class="space-y-6">
+            <!-- Original Post -->
+            <div class="bg-dark-card rounded-lg border border-dark-border">
+                <div class="p-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0">
+                            {% if post.author.profile.avatar %}
+                                <img src="{{ post.author.profile.avatar.url }}" alt="Avatar"
+                                     class="w-12 h-12 rounded-full"/>
+                            {% else %}
+                                <div class="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold">
+                                    {{ post.author.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <a href="{% url 'users:profile' post.author.id %}" class="font-semibold text-gray-300">
+                                    {{ post.author }}
+                                </a>
+                                <span class="bg-{{ post.author.profile.get_role_color_class }} text-xs px-2 py-1 rounded">
                                 {{ post.author.profile.role }}
                             </span>
-                            <span class="text-xs text-gray-500">{{ post.created_at }}</span>
-                        </div>
-                        <div class="prose prose-invert max-w-none">
-                            <p class="text-gray-300 mb-4">{{ post.body }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-dark-border px-6 py-3">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4 text-sm text-gray-400">
-                        <button class="hover:text-green-400 flex items-center space-x-1">
-                            <span>👍</span>
-                            <span>12</span>
-                        </button>
-                        <button class="hover:text-red-400 flex items-center space-x-1">
-                            <span>👎</span>
-                            <span>0</span>
-                        </button>
-                    </div>
-                    <button class="text-sm text-gray-400 hover:text-green-400">Відповісти</button>
-                </div>
-            </div>
-        </div>
-        <h1 class="text-3xl font-bold mb-4">Comments:</h1>
-        {% for comment in post.comments.all %}
-        <div class="bg-dark-card rounded-lg border border-dark-border">
-            <div class="p-6">
-                <div class="flex items-start space-x-4">
-                    <div class="flex-shrink-0">
-                        <img
-                            src="/placeholder.svg?height=48&width=48"
-                            alt="Avatar"
-                            class="w-12 h-12 rounded-full"
-                        />
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <a
-                                href="{% url 'users:profile' comment.author.id  %}"
-                                class="font-semibold text-blue-400"
-                            >
-                                {{ comment.author }}
-                            </a>
-                            <span
-                                class="{{ comment.author.profile.get_role_color_class }} text-xs px-2 py-1 rounded"
-                            >
-                                {{ comment.author.profile.role }}
-                            </span>
-                            <span class="text-xs text-gray-500">2 дні тому</span>
-                        </div>
-                        <div class="prose prose-invert max-w-none">
-                            <p class="text-gray-300 mb-4">{{ comment.content }}</p>
+                                <span class="text-xs text-gray-500">{{ post.created_at }}</span>
+                            </div>
+                            <p class="text-gray-300 mb-4" style="word-break: break-word">{{ post.body }}</p>
+                            {% if post.image %}
+                                <img src="{{ post.image.url }}" alt="Post Image"
+                                     class="rounded-lg max-w-full h-auto border border-dark-border mt-4"/>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-dark-border px-6 py-3">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4 text-sm text-gray-400">
-                        <button class="hover:text-green-400 flex items-center space-x-1">
-                            <span>👍</span>
-                            <span>8</span>
-                        </button>
-                        <button class="hover:text-red-400 flex items-center space-x-1">
-                            <span>👎</span>
-                            <span>0</span>
-                        </button>
-                    </div>
-                    <button class="text-sm text-gray-400 hover:text-green-400">Відповісти</button>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
 
-    <!-- Reply Form -->
-    <div class="bg-dark-card rounded-lg border border-dark-border p-6 mt-8">
-        <h3 class="text-lg font-semibold mb-4">Add comment</h3>
-        <form class="space-y-4" method="post">
-            {% csrf_token %}
-            <div>{{ form.content }}</div>
-            <div>
-                <button
-                    type="submit"
-                    class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors"
-                >
-                    Submit
-                </button>
+            <h1 class="text-3xl font-bold mt-10 mb-4">Comments:</h1>
+
+            {% for comment in post.comments.all %}
+                {% if not comment.parent %}
+                    <!-- Коментар -->
+                    <div class="bg-dark-card rounded-lg border border-dark-border mb-4">
+                        <div class="p-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0">
+                                    {% if comment.author.profile.avatar %}
+                                        <img src="{{ comment.author.profile.avatar.url }}" alt="Avatar"
+                                             class="w-10 h-10 rounded-full"/>
+                                    {% else %}
+                                        <div class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold">
+                                            {{ comment.author.username|slice:":1"|upper }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-sm text-gray-400">
+                                        <span class="font-semibold text-white">{{ comment.author }}</span>
+                                        <span class="ml-2 text-xs">{{ comment.created_at|timesince }} ago</span>
+                                    </div>
+                                    <p class="text-sm mt-1 text-white">{{ comment.content }}</p>
+                                    <div class="flex items-center text-sm text-gray-400 mt-2 space-x-4">
+                                        <button onclick="toggleReplyForm({{ comment.id }}, '{{ comment.author.username }}')"
+                                                class="reply-btn hover:underline text-sm">
+                                            Reply
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Форма відповіді -->
+                            <div id="reply-form-{{ comment.id }}" class="hidden mt-4">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {{ form.content }}
+                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                    <input type="hidden" name="reply_to" value="{{ comment.author.username }}">
+                                    <button type="submit"
+                                            class="mt-2 px-4 py-1 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm">
+                                        Send
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Відповіді -->
+                            {% for reply in comment.replies.all %}
+                                <div class="ml-12 mt-4 border-l border-gray-700 pl-6">
+                                    <div class="flex items-start space-x-4">
+                                        <div class="flex-shrink-0">
+                                            {% if reply.author.profile.avatar %}
+                                                <img src="{{ reply.author.profile.avatar.url }}" alt="Avatar"
+                                                     class="w-9 h-9 rounded-full"/>
+                                            {% else %}
+                                                <div class="w-9 h-9 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold">
+                                                    {{ reply.author.username|slice:":1"|upper }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="text-sm text-gray-400">
+                                                <span class="font-semibold text-white">{{ reply.author }}</span>
+                                                <span class="ml-2 text-xs">{{ reply.created_at|timesince }} ago</span>
+                                            </div>
+                                            <p class="text-sm mt-1 text-white">{{ reply.content }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Головна форма додавання коментаря -->
+            <div class="bg-dark-card rounded-lg border border-dark-border p-6 mt-8">
+                <h3 class="text-lg font-semibold mb-4">Add comment</h3>
+                <form class="space-y-4" method="post">
+                    {% csrf_token %}
+                    {{ form.content }}
+                    <button type="submit"
+                            class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors">
+                        Submit
+                    </button>
+                </form>
             </div>
-        </form>
-    </div>
-</main>
+        </div>
+    </main>
+
+    <!-- JS: відповіді -->
+    <script>
+        let activeForm = null;
+
+        function toggleReplyForm(commentId, username) {
+            if (activeForm && activeForm !== commentId) {
+                const prevForm = document.getElementById("reply-form-" + activeForm);
+                if (prevForm) {
+                    prevForm.classList.add("hidden");
+                }
+            }
+
+            const form = document.getElementById("reply-form-" + commentId);
+            if (form) {
+                if (form.classList.contains("hidden")) {
+                    form.classList.remove("hidden");
+                    const textarea = form.querySelector("textarea");
+                    if (textarea) {
+                        textarea.value = `@${username} ` + textarea.value;
+                        textarea.focus();
+                    }
+                    activeForm = commentId;
+                } else {
+                    form.classList.add("hidden");
+                    activeForm = null;
+                }
+            }
+        }
+    </script>
 {% endblock %}

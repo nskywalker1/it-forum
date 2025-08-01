@@ -50,7 +50,7 @@ def user_login(request):
 def profile(request, pk):
     profile_user = get_object_or_404(User, pk=pk)
     posts = Post.objects.filter(author=profile_user).order_by("-created_at")
-    paginator = Paginator(posts, 4)
+    paginator = Paginator(posts, 3)
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
 
@@ -68,7 +68,11 @@ def profile(request, pk):
     return render(
         request,
         "users/profile.html",
-        {"profile_user": profile_user, "posts": page_obj, "is_owner": is_owner},
+        {
+            "profile_user": profile_user,
+            "posts": page_obj,
+            "is_owner": is_owner,
+        },
     )
 
 

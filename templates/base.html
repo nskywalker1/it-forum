@@ -37,12 +37,14 @@
 
                     <!-- Navigation -->
                     <nav class="hidden md:flex space-x-8">
+                        {% if user.is_authenticated %}
                         <a
-                            href="index.html"
+                            href="{% url 'main:post_create' %}"
                             class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
-                            Home
+                            Create post
                         </a>
+                        {% endif %}
                         <a
                             href="search.html"
                             class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"

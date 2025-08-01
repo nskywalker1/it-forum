@@ -32,7 +32,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["title", "body", "category"]
+        fields = ["title", "body", "category", "image"]
         widgets = {
             "title": forms.TextInput(
                 attrs={
@@ -49,6 +49,11 @@ class PostForm(forms.ModelForm):
             "category": forms.Select(
                 attrs={
                     "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"""
+                }
+            ),
+            "image": forms.ClearableFileInput(
+                attrs={
+                    "class": "block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                 }
             ),
         }

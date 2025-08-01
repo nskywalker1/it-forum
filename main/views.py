@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Post
+from .models import Category, Post, Comment
 from .forms import CommentForm, PostForm
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -19,14 +20,17 @@ def index(request):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    comments = post.comments.all()
+    comments = post.comments.filter(parent__isnull=True)
 
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
+            parent_id = request.POST.get("parent_id")
             new_comment = form.save(commit=False)
             new_comment.post = post
             new_comment.author = request.user
+            if parent_id:
+                new_comment.parent = Comment.objects.get(pk=parent_id)
             new_comment.save()
             return redirect("main:post_detail", post_id=post_id)
     else:
@@ -47,9 +51,10 @@ def posts_by_category(request, category_id):
     )
 
 
+@login_required(login_url="users:login")
 def post_create(request):
     if request.method == "POST":
-        form = PostForm(request.POST, user=request.user)
+        form = PostForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user

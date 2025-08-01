@@ -3,23 +3,28 @@
     <!-- Breadcrumb -->
     <nav class="mb-6">
         <ol class="flex items-center space-x-2 text-sm text-gray-400">
-            <li><a href="index.html" class="hover:text-green-400">Головна</a></li>
+            <li><a href="{% url 'main:home' %}" class="hover:text-green-400">Home</a></li>
             <li>/</li>
-            <li class="text-gray-300">Створити тему</li>
+            <li class="text-gray-300">Create topic</li>
         </ol>
     </nav>
 
     <!-- Page Header -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-white mb-2">Створити нову тему</h1>
+        <h1 class="text-3xl font-bold text-white mb-2">Create a new topic</h1>
         <p class="text-gray-400">
-            Поділіться своїми думками, задайте питання або почніть обговорення
+            Share your thoughts, ask questions or start a discussion
         </p>
     </div>
 
     <!-- Create Post Form -->
     <div class="bg-dark-card rounded-lg border border-dark-border">
-        <form class="p-6 space-y-6" method="post" action="{% url 'main:post_create' %}">
+        <form
+            enctype="multipart/form-data"
+            class="p-6 space-y-6"
+            method="post"
+            action="{% url 'main:post_create' %}"
+        >
             {% csrf_token %}
             <!-- Title -->
             {{ form.media }} {{ form }}
@@ -30,7 +35,7 @@
                     type="submit"
                     class="px-8 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors"
                 >
-                    🚀 Опублікувати
+                    🚀 Publish
                 </button>
             </div>
         </form>
@@ -38,29 +43,30 @@
 
     <!-- Help Section -->
     <div class="mt-8 bg-dark-card rounded-lg border border-dark-border p-6">
-        <h3 class="text-lg font-semibold text-gray-300 mb-4">
-            💡 Поради для створення якісних тем
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-400">
-            <div>
-                <h4 class="font-medium text-gray-300 mb-2">Хороший заголовок:</h4>
-                <ul class="space-y-1 list-disc list-inside">
-                    <li>Чітко описує суть питання</li>
-                    <li>Містить ключові слова</li>
-                    <li>Не містить CAPS LOCK</li>
-                    <li>Конкретний та інформативний</li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-medium text-gray-300 mb-2">Якісний контент:</h4>
-                <ul class="space-y-1 list-disc list-inside">
-                    <li>Детально описує проблему</li>
-                    <li>Містить приклади коду</li>
-                    <li>Показує що ви вже спробували</li>
-                    <li>Дотримується правил спільноти</li>
-                </ul>
-            </div>
+    <h3 class="text-lg font-semibold text-gray-300 mb-4">
+        💡 Tips for Creating Quality Topics
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-400">
+        <div>
+            <h4 class="font-medium text-gray-300 mb-2">Good Title:</h4>
+            <ul class="space-y-1 list-disc list-inside">
+                <li>Clearly describes the essence of the question</li>
+                <li>Contains keywords</li>
+                <li>Does not contain CAPS LOCK</li>
+                <li>Specific and informative</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="font-medium text-gray-300 mb-2">Quality Content:</h4>
+            <ul class="space-y-1 list-disc list-inside">
+                <li>Describes the problem in detail</li>
+                <li>Includes code examples</li>
+                <li>Shows what you have already tried</li>
+                <li>Follows community guidelines</li>
+            </ul>
         </div>
     </div>
+</div>
+
 </main>
 {% endblock content %}
