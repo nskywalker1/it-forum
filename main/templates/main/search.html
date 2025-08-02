@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}
+    Search
+{% endblock %}
+
+{% block content %}
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search Form -->
+        <div class="bg-dark-card rounded-lg border border-dark-border p-6 mb-8">
+            <h1 class="text-3xl font-bold mb-6">Search</h1>
+
+            <form class="space-y-4" action="{% url 'main:post_search' %}">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-1">
+                        {{ form.query }}
+                    </div>
+                    <button
+                            type="submit"
+                            class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors whitespace-nowrap"
+                    >
+                        🔍 Search
+                    </button>
+                </div>
+
+                <!-- Advanced Search Options -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-600">
+                    {{ form.category }}
+                </div>
+            </form>
+        </div>
+
+        <!-- Search Results -->
+        <div class="space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold">Result search for "{{ query }}"</h2>
+                <span class="text-sm text-gray-400">Found {{ posts|length }} results</span>
+            </div>
+
+            {% for post in posts %}
+                <div class="bg-dark-card rounded-lg border border-dark-border p-6 hover:border-green-500 transition-colors">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-2">
+                                <a href="{% url 'main:post_detail' post.id %}" class="text-white hover:text-green-400">
+                                    {{ post.title }}
+                                </a>
+                            </h3>
+                            <p class="text-gray-300 mb-3">
+                                {{ post.body|truncatechars:50 }}
+                            </p>
+                            <div class="flex items-center text-sm text-gray-400 space-x-4">
+                                <span class="{{ post.category.bg_color }} {{ post.category.text_color }}
+                                text-xs px-2 py-1 rounded">
+                                    {{ post.category }}
+                                </span>
+                                <span>Author: <span class="text-{{ post.author.profile.get_role_color_class }}">
+                                    {{ post.author }}
+                                </span></span>
+                                <span>{{ post.comments.all.count }}</span>
+                                <span>{{ post.created_at }}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 ml-4">
+                            <img src="/placeholder.svg?height=32&width=32" alt="Avatar" class="w-8 h-8 rounded-full">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {#        <div class="flex items-center justify-center space-x-2 mt-8">#}
+        {#            <button class="px-3 py-2 text-gray-400 hover:text-white border border-gray-600 rounded-md hover:border-gray-500 transition-colors">#}
+        {#                Попередня#}
+        {#            </button>#}
+        {#            <button class="px-3 py-2 bg-green-600 text-white rounded-md">1</button>#}
+        {#            <button class="px-3 py-2 text-gray-400 hover:text-white border border-gray-600 rounded-md hover:border-gray-500 transition-colors">#}
+        {#                2#}
+        {#            </button>#}
+        {#            <button class="px-3 py-2 text-gray-400 hover:text-white border border-gray-600 rounded-md hover:border-gray-500 transition-colors">#}
+        {#                3#}
+        {#            </button>#}
+        {#            <button class="px-3 py-2 text-gray-400 hover:text-white border border-gray-600 rounded-md hover:border-gray-500 transition-colors">#}
+        {#                Наступна#}
+        {#            </button>#}
+        {#        </div>#}
+    </main>
+
+{% endblock %}

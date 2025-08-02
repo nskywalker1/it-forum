@@ -11,10 +11,10 @@ class CommentForm(forms.ModelForm):
                 attrs={
                     "placeholder": "Enter your comment",
                     "class": "w-full px-3 py-2 bg-gray-800 border border-gray-600 "
-                    "rounded-md text-white "
-                    "placeholder-gray-400 focus:outline-none focus:ring-2 "
-                    "focus:ring-green-500 "
-                    "focus:border-transparent resize-none",
+                             "rounded-md text-white "
+                             "placeholder-gray-400 focus:outline-none focus:ring-2 "
+                             "focus:ring-green-500 "
+                             "focus:border-transparent resize-none",
                 }
             ),
         }
@@ -36,24 +36,53 @@ class PostForm(forms.ModelForm):
         widgets = {
             "title": forms.TextInput(
                 attrs={
-                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent""",
+                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md 
+                    text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 
+                    focus:border-transparent""",
                     "placeholder": "Enter title",
                 }
             ),
             "body": forms.Textarea(
                 attrs={
-                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-b-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent""",
+                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-b-md text-white 
+                    placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 
+                    focus:border-transparent""",
                     "placeholder": "Enter body",
                 }
             ),
             "category": forms.Select(
                 attrs={
-                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"""
+                    "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white 
+                    focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"""
                 }
             ),
             "image": forms.ClearableFileInput(
                 attrs={
-                    "class": "block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-600 file:text-white hover:file:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    "class": """block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 
+                    file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-600 
+                    file:text-white hover:file:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"""
                 }
             ),
         }
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        label='Enter title...',
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": """w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md 
+            text-white placeholder-gray-400 focus:outline-none focus:ring-2 
+            focus:ring-green-500 focus:border-transparent""",
+            "placeholder": "Enter title",
+        }),
+    )
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=False,
+        empty_label="All categories",
+        widget=forms.Select(attrs={
+            "class": """w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none 
+            focus:ring-2 focus:ring-green-500 focus:border-transparent"""
+        })
+    )

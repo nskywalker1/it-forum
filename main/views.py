@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Post, Comment
-from .forms import CommentForm, PostForm
+from .forms import CommentForm, PostForm, SearchForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -64,3 +64,21 @@ def post_create(request):
         form = PostForm(user=request.user)
 
     return render(request, "main/create_post.html", {"form": form})
+
+
+def post_search(request):
+    form = SearchForm(request.GET or None)
+    posts = None
+    query = None
+
+    if request.GET and form.is_valid():
+        query = form.cleaned_data.get('query')
+        category = form.cleaned_data.get('category')
+        posts = Post.objects.all()
+
+        if query:
+            posts = posts.filter(title__icontains=query)
+        if category:
+            posts = posts.filter(category=category)
+
+    return render(request, 'main/search.html', {"posts": posts, 'form': form, 'query': query})
