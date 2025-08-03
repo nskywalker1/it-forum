@@ -1,24 +1,25 @@
 {% for post in posts %}
-<div class="p-6 space-y-6">
-    <div class="border-l-4 border-blue-500 pl-4">
-        <div class="flex items-start justify-between mb-2">
-            <h3 class="font-medium">
-                <a href="{% url 'main:post_detail' post.id %}" class="text-white hover:text-green-400">
-                    {{ post.title }}
-                </a>
-            </h3>
-            <span class="text-xs text-gray-500 whitespace-nowrap ml-4">{{ post.created_at }}</span>
-        </div>
-        <p class="text-gray-300 text-sm mb-3" style="word-break: break-word">
-            {{ post.body|truncatechars:100 }}
-        </p>
-        <div class="flex items-center space-x-4 text-xs text-gray-400">
+    <div class="p-6 space-y-6">
+        <div class="border-l-4 border-blue-500 pl-4">
+            <div class="flex items-start justify-between mb-2">
+                <h3 class="font-medium">
+                    <a href="{% url 'main:post_detail' post.id %}" class="text-white hover:text-green-400">
+                        {{ post.title }}
+                    </a>
+                </h3>
+                <span class="text-xs text-gray-500 whitespace-nowrap ml-4">{{ post.created_at }}</span>
+            </div>
+            <p class="text-gray-300 text-sm mb-3" style="word-break: break-word">
+                {{ post.body|truncatechars:100 }}
+            </p>
+            <div class="flex items-center space-x-4 text-xs text-gray-400">
             <span class="{{ post.category.bg_color }} {{ post.category.text_color }}  px-2 py-1 rounded">
                 {{ post.category }}
             </span>
-            <span>👍 8</span>
-            <span>💬 {{ post.total_comments }}</span>
+                <span>❤️</span>
+                <span>{{ post.likes.count }}</span>
+                <span>💬 {{ post.total_comments }}</span>
+            </div>
         </div>
     </div>
-</div>
 {% endfor %}

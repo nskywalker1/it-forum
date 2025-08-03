@@ -5,33 +5,31 @@
         <!-- Breadcrumb -->
         <nav class="mb-6">
             <ol class="flex items-center space-x-2 text-sm text-gray-400">
-                <li><a href="/" class="hover:text-green-400">Home</a></li>
+                <li>
+                    <a href="/" class="hover:text-green-400">Home</a>
+                </li>
                 <li>/</li>
                 <li>
-                    <a href="{% url 'main:posts_by_category' post.category.id %}" class="hover:text-green-400">
-                        {{ post.category }}
-                    </a>
+                    <a href="{% url 'main:posts_by_category' post.category.id %}"
+                       class="hover:text-green-400">{{ post.category }}</a>
                 </li>
                 <li>/</li>
                 <li class="text-gray-300">{{ post.title }}</li>
             </ol>
         </nav>
-
         <!-- Topic Header -->
         <div class="bg-dark-card rounded-lg border border-dark-border p-6 mb-6">
             <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
             <div class="flex items-center text-sm text-gray-400 space-x-4">
-            <span>
-                Created:
-                <a href="{% url 'users:profile' post.author.id %}" class="text-green-400">
-                    {{ post.author }}
-                </a>
-            </span>
+                <span>
+                    Created:
+                    <a href="{% url 'users:profile' post.author.id %}"
+                       class="text-green-400">{{ post.author }}</a>
+                </span>
                 <span>{{ post.created_at|date:"j E Y" }}</span>
                 <span>Comments: {{ post.total_comments }}</span>
             </div>
         </div>
-
         <!-- Post Content -->
         <div class="space-y-6">
             <!-- Original Post -->
@@ -40,7 +38,8 @@
                     <div class="flex items-start space-x-4">
                         <div class="flex-shrink-0">
                             {% if post.author.profile.avatar %}
-                                <img src="{{ post.author.profile.avatar.url }}" alt="Avatar"
+                                <img src="{{ post.author.profile.avatar.url }}"
+                                     alt="Avatar"
                                      class="w-12 h-12 rounded-full"/>
                             {% else %}
                                 <div class="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold">
@@ -50,26 +49,34 @@
                         </div>
                         <div class="flex-1">
                             <div class="flex items-center space-x-2 mb-2">
-                                <a href="{% url 'users:profile' post.author.id %}" class="font-semibold text-gray-300">
-                                    {{ post.author }}
-                                </a>
+                                <a href="{% url 'users:profile' post.author.id %}"
+                                   class="font-semibold text-gray-300">{{ post.author }}</a>
                                 <span class="bg-{{ post.author.profile.get_role_color_class }} text-xs px-2 py-1 rounded">
-                                {{ post.author.profile.role }}
-                            </span>
+                                    {{ post.author.profile.role }}
+                                </span>
                                 <span class="text-xs text-gray-500">{{ post.created_at }}</span>
                             </div>
                             <p class="text-gray-300 mb-4" style="word-break: break-word">{{ post.body }}</p>
                             {% if post.image %}
-                                <img src="{{ post.image.url }}" alt="Post Image"
+                                <img src="{{ post.image.url }}"
+                                     alt="Post Image"
                                      class="rounded-lg max-w-full h-auto border border-dark-border mt-4"/>
                             {% endif %}
                         </div>
                     </div>
+
+                    <form action="{% url 'main:toggle_like' post.id %}">
+                        {% csrf_token %}
+                        <div class="flex items-center space-x-4 text-sm text-gray-400">
+                            <button type="submit" class="hover:text-green-400 flex items-center space-x-1">
+                                <span>❤️</span>
+                                <span>{{ post.likes.count }}</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
             <h1 class="text-3xl font-bold mt-10 mb-4">Comments:</h1>
-
             {% for comment in post.comments.all %}
                 {% if not comment.parent %}
                     <!-- Коментар -->
@@ -78,7 +85,8 @@
                             <div class="flex items-start space-x-4">
                                 <div class="flex-shrink-0">
                                     {% if comment.author.profile.avatar %}
-                                        <img src="{{ comment.author.profile.avatar.url }}" alt="Avatar"
+                                        <img src="{{ comment.author.profile.avatar.url }}"
+                                             alt="Avatar"
                                              class="w-10 h-10 rounded-full"/>
                                     {% else %}
                                         <div class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold">
@@ -94,13 +102,11 @@
                                     <p class="text-sm mt-1 text-white">{{ comment.content }}</p>
                                     <div class="flex items-center text-sm text-gray-400 mt-2 space-x-4">
                                         <button onclick="toggleReplyForm({{ comment.id }}, '{{ comment.author.username }}')"
-                                                class="reply-btn hover:underline text-sm">
-                                            Reply
+                                                class="reply-btn hover:underline text-sm">Reply
                                         </button>
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Форма відповіді -->
                             <div id="reply-form-{{ comment.id }}" class="hidden mt-4">
                                 <form method="post">
@@ -114,14 +120,14 @@
                                     </button>
                                 </form>
                             </div>
-
                             <!-- Відповіді -->
                             {% for reply in comment.replies.all %}
                                 <div class="ml-12 mt-4 border-l border-gray-700 pl-6">
                                     <div class="flex items-start space-x-4">
                                         <div class="flex-shrink-0">
                                             {% if reply.author.profile.avatar %}
-                                                <img src="{{ reply.author.profile.avatar.url }}" alt="Avatar"
+                                                <img src="{{ reply.author.profile.avatar.url }}"
+                                                     alt="Avatar"
                                                      class="w-9 h-9 rounded-full"/>
                                             {% else %}
                                                 <div class="w-9 h-9 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold">

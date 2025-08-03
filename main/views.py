@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Post, Comment
+from .models import Category, Post, Comment, Like
 from .forms import CommentForm, PostForm, SearchForm
 from django.contrib.auth.decorators import login_required
 
@@ -64,6 +64,15 @@ def post_create(request):
         form = PostForm(user=request.user)
 
     return render(request, "main/create_post.html", {"form": form})
+
+
+def toggle_like(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    like, created = Like.objects.get_or_create(user=request.user, post=post)
+
+    if not created:
+        like.delete()
+    return redirect('main:post_detail', post_id=post_id)
 
 
 def post_search(request):
