@@ -9,6 +9,7 @@ from .forms import UserLoginForm, UserRegistrationForm, ProfileForm, UserForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import User, Profile
+from .tasks import send_welcome_email
 
 
 def user_register(request):
@@ -21,7 +22,8 @@ def user_register(request):
             user.save()
             Profile.objects.create(user=user)
             login(request, user)
-            return redirect("/")
+            send_welcome_email.delay(user.email, user.username)
+            return redirect("main:home")
     else:
         form = UserRegistrationForm()
     return render(request, "users/register.html", {"form": form})
