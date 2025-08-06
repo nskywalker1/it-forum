@@ -23,6 +23,8 @@ def post_detail(request, post_id):
     comments = post.comments.filter(parent__isnull=True)
 
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect('users:login')
         form = CommentForm(request.POST)
         if form.is_valid():
             parent_id = request.POST.get("parent_id")
@@ -66,6 +68,7 @@ def post_create(request):
     return render(request, "main/create_post.html", {"form": form})
 
 
+@login_required(login_url="users:login")
 def toggle_like(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     like, created = Like.objects.get_or_create(user=request.user, post=post)

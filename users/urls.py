@@ -10,4 +10,8 @@ urlpatterns = [
     path("profile/", views.my_profile_redirect, name="my_profile"),
     path("profile/<int:pk>/", views.profile, name="profile"),
     path("profile/edit/", views.profile_edit, name="profile_edit"),
+    path('password-reset/', views.password_reset_request,
+         name='password_reset_request'),
+    path('password-reset/<uidb64>/<token>/', views.password_reset_confirm,
+         name='password_reset_confirm'),
 ]
