@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "users",
     "django_celery_results",
     "main",
+    "django-redis"
 ]
 
 MIDDLEWARE = [
@@ -112,3 +113,12 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 SITE_URL = 'http://127.0.0.1:8000'
 SITE_ID = 1
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}

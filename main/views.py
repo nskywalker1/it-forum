@@ -2,18 +2,24 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Post, Comment, Like
 from .forms import CommentForm, PostForm, SearchForm
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 
 
 def index(request):
-    categories = Category.objects.all()
-    categories = sorted(
-        categories, key=lambda c: 0 if c.name.lower() == "general" else 1
-    )
+    cache_key = "category_data"
+    category_data = cache.get(cache_key)
+    if category_data is None:
+        categories = Category.objects.all()
+        categories = sorted(
+            categories, key=lambda c: 0 if c.name.lower() == "general" else 1
+        )
 
-    category_data = []
-    for cat in categories:
-        recent_posts = cat.posts.order_by("-created_at")[:2]
-        category_data.append((cat, recent_posts))
+        category_data = []
+        for cat in categories:
+            recent_posts = cat.posts.order_by("-created_at")[:2]
+            category_data.append((cat, recent_posts))
+
+        cache.set(cache_key, category_data, 300)
 
     return render(request, "main/index.html", {"category_data": category_data})
 
