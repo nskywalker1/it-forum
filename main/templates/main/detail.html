@@ -18,18 +18,31 @@
             </ol>
         </nav>
         <!-- Topic Header -->
-        <div class="bg-dark-card rounded-lg border border-dark-border p-6 mb-6">
-            <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
-            <div class="flex items-center text-sm text-gray-400 space-x-4">
-                <span>
-                    Created:
-                    <a href="{% url 'users:profile' post.author.id %}"
-                       class="text-green-400">{{ post.author }}</a>
-                </span>
-                <span>{{ post.created_at|date:"j E Y" }}</span>
-                <span>Comments: {{ post.total_comments }}</span>
-            </div>
-        </div>
+        <div class="bg-dark-card rounded-lg border border-dark-border p-6 mb-6 relative">
+    <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
+
+    {% if request.user == post.author %}
+        <form method="post" action="{% url 'main:post_delete' post.id %}" style="position: absolute; top: 1rem; right: 1rem;">
+            {% csrf_token %}
+            <button type="submit"
+                    title="Видалити пост"
+                    class="text-gray-400 hover:text-gray-600 text-xl font-bold leading-none"
+                    onclick="return confirm('Ви впевнені, що хочете видалити цей пост?');">
+                &times;
+            </button>
+        </form>
+    {% endif %}
+
+    <div class="flex items-center text-sm text-gray-400 space-x-4">
+        <span>
+            Created:
+            <a href="{% url 'users:profile' post.author.id %}"
+               class="text-green-400">{{ post.author }}</a>
+        </span>
+        <span>{{ post.created_at|date:"j E Y" }}</span>
+        <span>Comments: {{ post.total_comments }}</span>
+    </div>
+</div>
         <!-- Post Content -->
         <div class="space-y-6">
             <!-- Original Post -->

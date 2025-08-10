@@ -23,7 +23,6 @@ INSTALLED_APPS = [
     "users",
     "django_celery_results",
     "main",
-    "django-redis"
 ]
 
 MIDDLEWARE = [

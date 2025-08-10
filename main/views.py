@@ -1,4 +1,7 @@
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+
 from .models import Category, Post, Comment, Like
 from .forms import CommentForm, PostForm, SearchForm
 from django.contrib.auth.decorators import login_required
@@ -6,9 +9,8 @@ from django.core.cache import cache
 
 
 def index(request):
-    cache_key = "category_data"
-    category_data = cache.get(cache_key)
-    if category_data is None:
+    category_data = cache.get('category_data')
+    if not category_data:
         categories = Category.objects.all()
         categories = sorted(
             categories, key=lambda c: 0 if c.name.lower() == "general" else 1
@@ -19,7 +21,7 @@ def index(request):
             recent_posts = cat.posts.order_by("-created_at")[:2]
             category_data.append((cat, recent_posts))
 
-        cache.set(cache_key, category_data, 300)
+        cache.set('category_data', category_data, 900)
 
     return render(request, "main/index.html", {"category_data": category_data})
 
@@ -82,6 +84,16 @@ def toggle_like(request, post_id):
     if not created:
         like.delete()
     return redirect('main:post_detail', post_id=post_id)
+
+@require_POST
+def post_delete(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+
+    if request.user != post.author:
+        return HttpResponseForbidden("Sorry, but you are not an author.")
+
+    post.delete()
+    return redirect('main:home')
 
 
 def post_search(request):

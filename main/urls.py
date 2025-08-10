@@ -12,4 +12,5 @@ urlpatterns = [
     path("topic/create/", views.post_create, name="post_create"),
     path('topic/search/', views.post_search, name="post_search"),
     path('like/<int:post_id>/', views.toggle_like, name="toggle_like"),
+    path('delete/<int:post_id>/', views.post_delete, name="post_delete"),
 ]
